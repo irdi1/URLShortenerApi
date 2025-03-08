@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface UrlMappingRepository extends JpaRepository<UrlMapping, Long> {
 
     Optional<UrlMapping> findByShortCode(String shortcode);
+    Optional<UrlMapping> findByOriginalUrl(String originalUrl);
 }

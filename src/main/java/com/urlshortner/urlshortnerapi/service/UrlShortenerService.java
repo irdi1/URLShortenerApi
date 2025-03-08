@@ -1,5 +1,6 @@
 package com.urlshortner.urlshortnerapi.service;
 
+import com.urlshortner.urlshortnerapi.exception.ShortCodeNotFoundException;
 import com.urlshortner.urlshortnerapi.model.UrlMapping;
 import com.urlshortner.urlshortnerapi.repository.UrlMappingRepository;
 import com.urlshortner.urlshortnerapi.util.Base62;
@@ -20,20 +21,27 @@ public class UrlShortenerService {
     }
 
     public String shortenUrl(String originalUrl) {
-        UrlMapping mapping = new UrlMapping(originalUrl);
-        mapping = urlMappingRepository.save(mapping);
 
-        String shortCode = Base62.encode(mapping.getId());
-        mapping.setShortCode(shortCode);
-        urlMappingRepository.save(mapping);
+        Optional<UrlMapping> existing = urlMappingRepository.findByOriginalUrl(originalUrl);
+        if (existing.isPresent()) {
+            return existing.get().getShortCode();
+        } else {
+            UrlMapping mapping = new UrlMapping(originalUrl);
+            mapping = urlMappingRepository.save(mapping);
 
-        return shortCode;
+            String shortCode = Base62.encode(mapping.getId());
+            mapping.setShortCode(shortCode);
+            urlMappingRepository.save(mapping);
+
+            return shortCode;
+        }
     }
 
     @Cacheable(value = "urlCache", key = "#shortCode")
-    public Optional<String> getOriginalUrl(String shortCode) {
-        Optional<UrlMapping> mapping = urlMappingRepository.findByShortCode(shortCode);
-        return mapping.map(UrlMapping::getOriginalUrl);
+    public String getOriginalUrl(String shortCode) {
+        UrlMapping mapping = urlMappingRepository.findByShortCode(shortCode)
+                .orElseThrow(() -> new ShortCodeNotFoundException(shortCode));
+        return mapping.getOriginalUrl();
     }
 
 }
