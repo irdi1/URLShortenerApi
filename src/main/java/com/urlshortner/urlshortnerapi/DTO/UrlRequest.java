@@ -1,9 +1,12 @@
 package com.urlshortner.urlshortnerapi.DTO;
 
+import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.URL;
 
 public class UrlRequest {
-    @jakarta.validation.constraints.NotBlank(message = "URL is required")
-    @org.hibernate.validator.constraints.URL(message = "Invalid URL format")
+
+    @NotBlank(message = "URL is required")
+    @URL(message = "Invalid URL format")
     private String url;
 
     public String getUrl() {
