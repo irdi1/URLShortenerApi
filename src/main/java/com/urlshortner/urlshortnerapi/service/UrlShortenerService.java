@@ -44,6 +44,4 @@ public class UrlShortenerService {
         return mapping.getOriginalUrl();
     }
 
-    
-
 }
