@@ -41,4 +41,8 @@ public class UrlMapping {
     public void setShortCode(String shortCode) {
         this.shortCode = shortCode;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

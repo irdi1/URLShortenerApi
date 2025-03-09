@@ -18,7 +18,7 @@ public class RateLimitingFilter implements Filter {
     private final Map<String, Bucket> ipBucketMap = new ConcurrentHashMap<>();
 
     // Rate limit configuration: 100 requests per minute
-    private static final long CAPACITY = 100;
+    private static final long CAPACITY = 20;
     private static final Refill REFILL = Refill.greedy(CAPACITY, Duration.ofMinutes(1));
     private static final Bandwidth LIMIT = Bandwidth.classic(CAPACITY, REFILL);
 
