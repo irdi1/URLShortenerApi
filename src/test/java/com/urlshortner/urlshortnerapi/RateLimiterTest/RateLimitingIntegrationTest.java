@@ -32,7 +32,7 @@ public class RateLimitingIntegrationTest {
     @Test
     public void testRateLimitExceeded() throws Exception {
         // Use a different IP address for this scenario
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 100; i++) {
             mockMvc.perform(post("/api/shortener")
                     .with(request -> { request.setRemoteAddr("127.0.0.2"); return request; })
                     .contentType(MediaType.APPLICATION_JSON)
